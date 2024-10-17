@@ -20,6 +20,7 @@ public:
     TPolinom();
     TPolinom(number, number*, int);
     friend ostream& operator<< (ostream&, TPolinom&);
+    friend QString& operator<< (QString&, TPolinom&);
     friend istream& operator>> (istream&, TPolinom&);
     void set_print_mode (EPrintMode);
     number count_value (number);

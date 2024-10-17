@@ -11,14 +11,19 @@ class TInterface : public QWidget
 {
     Q_OBJECT
 
+    QLabel *an_name, *an_delimiter;
+    QLineEdit *an_re, *an_im;
     QLabel *a_name, *a_delimiter;
     QLineEdit *a_re, *a_im;
     QLabel *b_name, *b_delimiter;
     QLineEdit *b_re, *b_im;
     QLabel *x_name, *x_delimiter;
     QLineEdit *x_re, *x_im;
-    QPushButton* value_btn;
+    QPushButton* value_btn, *change_an_btn;
+    QPushButton* submit_an_btn;
     QLabel* output;
+
+    TPolinom main_pol;
 
 public:
     TInterface(QWidget *parent = nullptr);
@@ -26,5 +31,7 @@ public:
 
 public slots:
     void value();
+    void change_an();
+    void imp_change_an();
 };
 #endif // TINTERFACE_H

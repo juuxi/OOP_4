@@ -60,6 +60,38 @@ ostream& operator<< (ostream& os, TPolinom& pol)
     return os;
 }
 
+QString& operator<< (QString& os, TPolinom& pol)
+{
+    if (pol.printMode == EPrintModeCanonic)
+    {
+        for (int i = pol.N; i > 0; i--)
+        {
+            os << pol.coefficients[i];
+            os += " x^";
+            os += QString().setNum(i);
+            os += " + ";
+        }
+        os << pol.coefficients[0];
+        os += "\n";
+    }
+    else
+    {
+        os << pol.coefficients[pol.N];
+        os += " * ";
+        for (int i = 0; i < pol.N - 1; i++)
+        {
+            os += "(x - ";
+            os << pol.roots[i];
+            os +=  ") * ";
+        }
+        os += "(x - ";
+        os << pol.roots[pol.N - 1];
+        os += ")";
+        os += "\n";
+    }
+    return os;
+}
+
 istream& operator>> (istream& is, TPolinom& pol)
 {
     is >> pol.coefficients[pol.N];
