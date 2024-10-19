@@ -54,6 +54,8 @@ TInterface::TInterface(QWidget *parent)
     value_btn->setGeometry(50, 250, 200, 30);
     change_an_btn = new QPushButton("Изменить an", this);
     change_an_btn->setGeometry(260, 250, 150, 30);
+    print_btn = new QPushButton("Вывести полином", this);
+    print_btn->setGeometry(420, 250, 150, 30);
 
     submit_value_btn = new QPushButton("Применить", this);
     submit_value_btn->setGeometry(200, 150, 150, 30);
@@ -61,23 +63,38 @@ TInterface::TInterface(QWidget *parent)
     submit_an_btn = new QPushButton("Применить", this);
     submit_an_btn->setGeometry(200, 150, 150, 30);
     submit_an_btn->hide();
+    submit_print_btn = new QPushButton("Применить", this);
+    submit_print_btn->setGeometry(200, 150, 150, 30);
+    submit_print_btn->hide();
+
+    print_mode = new QComboBox(this);
+    print_mode->addItem("Классический");
+    print_mode->addItem("Канонический");
+    print_mode->setGeometry(100, 30, 130, 20);
+    print_mode->hide();
 
     output = new QLabel(this);
     output->setGeometry(150, 350, 300, 50);
 
     connect(value_btn, SIGNAL(pressed()), this, SLOT(value()));
     connect(change_an_btn, SIGNAL(pressed()), this, SLOT(change_an()));
+    connect(print_btn, SIGNAL(pressed()), this, SLOT(print()));
     connect(submit_an_btn, SIGNAL(pressed()), this, SLOT(imp_change_an()));
     connect(submit_value_btn, SIGNAL(pressed()), this, SLOT(imp_value()));
+    connect(submit_print_btn, SIGNAL(pressed()), this, SLOT(imp_print()));
 }
 
 TInterface::~TInterface()
 {
     delete value_btn;
     delete change_an_btn;
+    delete print_btn;
 
     delete submit_an_btn;
     delete submit_value_btn;
+    delete submit_print_btn;
+
+    delete print_mode;
 
     delete output;
 
@@ -141,4 +158,24 @@ void TInterface::imp_change_an()
     an_delimiter->hide();
     an_im->hide();
     submit_an_btn->hide();
+}
+
+void TInterface::print()
+{
+    output->setText("");
+    print_mode->show();
+    submit_print_btn->show();
+}
+
+void TInterface::imp_print()
+{
+    if (print_mode->currentText() == "Классический")
+        main_pol.set_print_mode(EPrintModeClassic);
+    else
+        main_pol.set_print_mode(EPrintModeCanonic);
+    QString s;
+    s << main_pol;
+    output->setText(s);
+    print_mode->hide();
+    submit_print_btn->hide();
 }
