@@ -19,6 +19,10 @@ TInterface::TInterface(QWidget *parent)
     a_delimiter->setGeometry(150, 30, 20, 20);
     a_im = new QLineEdit(this);
     a_im->setGeometry(170, 30, 30, 20);
+    a_name->hide();
+    a_re->hide();
+    a_delimiter->hide();
+    a_im->hide();
 
     an_name = new QLabel("a = ", this);
     an_name->setGeometry(100, 30, 20, 20);
@@ -33,29 +37,27 @@ TInterface::TInterface(QWidget *parent)
     an_delimiter->hide();
     an_im->hide();
 
-    b_name = new QLabel("b = ", this);
-    b_name->setGeometry(100, 60, 20, 20);
-    b_re = new QLineEdit(this);
-    b_re->setGeometry(120, 60, 30, 20);
-    b_delimiter = new QLabel("+ i ", this);
-    b_delimiter->setGeometry(150, 60, 20, 20);
-    b_im = new QLineEdit(this);
-    b_im->setGeometry(170, 60, 30, 20);
-
     x_name = new QLabel("x = ", this);
-    x_name->setGeometry(100, 90, 20, 20);
+    x_name->setGeometry(100, 30, 20, 20);
     x_re = new QLineEdit(this);
-    x_re->setGeometry(120, 90, 30, 20);
+    x_re->setGeometry(120, 30, 30, 20);
     x_delimiter = new QLabel("+ i ", this);
-    x_delimiter->setGeometry(150, 90, 20, 20);
+    x_delimiter->setGeometry(150, 30, 20, 20);
     x_im = new QLineEdit(this);
-    x_im->setGeometry(170, 90, 30, 20);
+    x_im->setGeometry(170, 30, 30, 20);
+    x_name->hide();
+    x_re->hide();
+    x_delimiter->hide();
+    x_im->hide();
 
     value_btn = new QPushButton("Вычислить значение в x", this);
-    value_btn->setGeometry(100, 250, 200, 30);
+    value_btn->setGeometry(50, 250, 200, 30);
     change_an_btn = new QPushButton("Изменить an", this);
-    change_an_btn->setGeometry(310, 250, 150, 30);
+    change_an_btn->setGeometry(260, 250, 150, 30);
 
+    submit_value_btn = new QPushButton("Применить", this);
+    submit_value_btn->setGeometry(200, 150, 150, 30);
+    submit_value_btn->hide();
     submit_an_btn = new QPushButton("Применить", this);
     submit_an_btn->setGeometry(200, 150, 150, 30);
     submit_an_btn->hide();
@@ -66,6 +68,7 @@ TInterface::TInterface(QWidget *parent)
     connect(value_btn, SIGNAL(pressed()), this, SLOT(value()));
     connect(change_an_btn, SIGNAL(pressed()), this, SLOT(change_an()));
     connect(submit_an_btn, SIGNAL(pressed()), this, SLOT(imp_change_an()));
+    connect(submit_value_btn, SIGNAL(pressed()), this, SLOT(imp_value()));
 }
 
 TInterface::~TInterface()
@@ -74,6 +77,7 @@ TInterface::~TInterface()
     delete change_an_btn;
 
     delete submit_an_btn;
+    delete submit_value_btn;
 
     delete output;
 
@@ -81,10 +85,6 @@ TInterface::~TInterface()
     delete a_delimiter;
     delete a_re;
     delete a_im;
-    delete b_name;
-    delete b_delimiter;
-    delete b_re;
-    delete b_im;
     delete x_name;
     delete x_delimiter;
     delete x_re;
@@ -98,26 +98,25 @@ TInterface::~TInterface()
 
 void TInterface::value()
 {
-    number a = number(a_re->text().toDouble(), a_im->text().toDouble());
-    number b = number(b_re->text().toDouble(), b_im->text().toDouble());
+    output->setText("");
+    x_name->show();
+    x_re->show();
+    x_delimiter->show();
+    x_im->show();
+    submit_value_btn->show();
+}
+
+void TInterface::imp_value()
+{
     number x = number(x_re->text().toDouble(), x_im->text().toDouble());
-    number roots[] = {b};
-    TPolinom pol(a, roots, 1);
     QString s;
-    s<<pol.count_value(x);
+    s << main_pol.count_value(x);
     output->setText(s);
-    a_name->hide();
-    a_re->hide();
-    a_delimiter->hide();
-    a_im->hide();
-    b_name->hide();
-    b_re->hide();
-    b_delimiter->hide();
-    b_im->hide();
     x_name->hide();
     x_re->hide();
     x_delimiter->hide();
     x_im->hide();
+    submit_value_btn->hide();
 }
 
 void TInterface::change_an()
