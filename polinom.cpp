@@ -127,3 +127,8 @@ void TPolinom::change_size(int new_size)
     coefficients.change_size(new_size + 1);
     N = new_size;
 }
+
+int TPolinom::get_size()
+{
+    return N;
+}

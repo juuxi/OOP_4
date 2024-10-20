@@ -27,6 +27,7 @@ public:
     void change_an (number);
     void change_root (number, size_t);
     void change_size (int);
+    int get_size();
 private:
     void count_coefficients(number);
 };

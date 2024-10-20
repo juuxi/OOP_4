@@ -14,12 +14,13 @@ class TInterface : public QWidget
 
     QLabel *an_name, *an_delimiter;
     QLineEdit *an_re, *an_im;
+    QLabel *write_mode;
     QLabel *a_name, *a_delimiter;
     QLineEdit *a_re, *a_im;
     QLabel *x_name, *x_delimiter;
     QLineEdit *x_re, *x_im;
-    QPushButton* value_btn, *change_an_btn, *print_btn;
-    QPushButton* submit_an_btn, *submit_value_btn, *submit_print_btn;
+    QPushButton* value_btn, *change_an_btn, *print_btn, *write_btn;
+    QPushButton* submit_an_btn, *submit_value_btn, *submit_print_btn, *submit_write_btn;
     QComboBox* print_mode;
     QLabel* output;
 
@@ -33,6 +34,7 @@ public slots:
     void value();
     void change_an();
     void print();
+    void write();
     void imp_value();
     void imp_change_an();
     void imp_print();

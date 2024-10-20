@@ -24,6 +24,10 @@ TInterface::TInterface(QWidget *parent)
     a_delimiter->hide();
     a_im->hide();
 
+    write_mode = new QLabel("Введите an", this);
+    write_mode->setGeometry(100, 10, 150, 20);
+    write_mode->hide();
+
     an_name = new QLabel("a = ", this);
     an_name->setGeometry(100, 30, 20, 20);
     an_re = new QLineEdit(this);
@@ -56,6 +60,8 @@ TInterface::TInterface(QWidget *parent)
     change_an_btn->setGeometry(260, 250, 150, 30);
     print_btn = new QPushButton("Вывести полином", this);
     print_btn->setGeometry(420, 250, 150, 30);
+    write_btn = new QPushButton("Ввести полином", this);
+    write_btn->setGeometry(580, 250, 150, 30);
 
     submit_value_btn = new QPushButton("Применить", this);
     submit_value_btn->setGeometry(200, 150, 150, 30);
@@ -66,6 +72,9 @@ TInterface::TInterface(QWidget *parent)
     submit_print_btn = new QPushButton("Применить", this);
     submit_print_btn->setGeometry(200, 150, 150, 30);
     submit_print_btn->hide();
+    submit_write_btn = new QPushButton("Далее", this);
+    submit_write_btn->setGeometry(200, 150, 150, 30);
+    submit_write_btn->hide();
 
     print_mode = new QComboBox(this);
     print_mode->addItem("Классический");
@@ -79,9 +88,11 @@ TInterface::TInterface(QWidget *parent)
     connect(value_btn, SIGNAL(pressed()), this, SLOT(value()));
     connect(change_an_btn, SIGNAL(pressed()), this, SLOT(change_an()));
     connect(print_btn, SIGNAL(pressed()), this, SLOT(print()));
+    connect(write_btn, SIGNAL(pressed()), this, SLOT(write()));
     connect(submit_an_btn, SIGNAL(pressed()), this, SLOT(imp_change_an()));
     connect(submit_value_btn, SIGNAL(pressed()), this, SLOT(imp_value()));
     connect(submit_print_btn, SIGNAL(pressed()), this, SLOT(imp_print()));
+    connect(submit_write_btn, SIGNAL(pressed()), this, SLOT(write()));
 }
 
 TInterface::~TInterface()
@@ -89,10 +100,12 @@ TInterface::~TInterface()
     delete value_btn;
     delete change_an_btn;
     delete print_btn;
+    delete write_btn;
 
     delete submit_an_btn;
     delete submit_value_btn;
     delete submit_print_btn;
+    delete submit_write_btn;
 
     delete print_mode;
 
@@ -102,6 +115,9 @@ TInterface::~TInterface()
     delete a_delimiter;
     delete a_re;
     delete a_im;
+
+    delete write_mode;
+
     delete x_name;
     delete x_delimiter;
     delete x_re;
@@ -178,4 +194,56 @@ void TInterface::imp_print()
     output->setText(s);
     print_mode->hide();
     submit_print_btn->hide();
+}
+
+void TInterface::write()
+{
+    QString s = write_mode->text();
+    int i = 0;
+
+    if (s == "Введите an" && a_re->text() == "")
+    {
+        output->setText("");
+        submit_write_btn->show();
+        a_name->show();
+        a_re->show();
+        a_delimiter->show();
+        a_im->show();
+        write_mode->show();
+    }
+
+    if (s == "Введите an" && a_re->text() != "")
+    {
+        main_pol.change_an(number(a_re->text().toDouble(), a_im->text().toDouble()));
+        write_mode->setText("Введите корень 1");
+        a_re->setText("");
+        a_im->setText("");
+    }
+
+    if (s != "Введите an")
+    {
+        s.remove(0, 15);
+        i = s.toInt();
+        main_pol.change_root(number(a_re->text().toDouble(), a_im->text().toDouble()), i-1);
+        s = "Введите корень ";
+        s += QString().setNum(i+1);
+        write_mode->setText(s);
+        a_re->setText("");
+        a_im->setText("");
+    }
+
+    if (i == main_pol.get_size())
+    {
+        submit_write_btn->hide();
+        a_name->hide();
+        a_re->hide();
+        a_delimiter->hide();
+        a_im->hide();
+        write_mode->hide();
+        write_mode->setText("Введите an");
+        a_re->setText("");
+        a_im->setText("");
+        output->setText("Полином изменен");
+        return;
+    }
 }
