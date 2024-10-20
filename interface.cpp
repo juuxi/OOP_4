@@ -54,6 +54,13 @@ TInterface::TInterface(QWidget *parent)
     x_delimiter->hide();
     x_im->hide();
 
+    new_size_name = new QLabel("Новый размер - ", this);
+    new_size_name->setGeometry(100, 30, 120, 20);
+    new_size_value = new QLineEdit(this);
+    new_size_value->setGeometry(220, 30, 30, 20);
+    new_size_name->hide();
+    new_size_value->hide();
+
     value_btn = new QPushButton("Вычислить значение в x", this);
     value_btn->setGeometry(50, 250, 200, 30);
     change_an_btn = new QPushButton("Изменить an", this);
@@ -62,6 +69,8 @@ TInterface::TInterface(QWidget *parent)
     print_btn->setGeometry(420, 250, 150, 30);
     write_btn = new QPushButton("Ввести полином", this);
     write_btn->setGeometry(580, 250, 150, 30);
+    change_size_btn = new QPushButton("Изменить размер", this);
+    change_size_btn->setGeometry(740, 250, 150, 30);
 
     submit_value_btn = new QPushButton("Применить", this);
     submit_value_btn->setGeometry(200, 150, 150, 30);
@@ -75,6 +84,9 @@ TInterface::TInterface(QWidget *parent)
     submit_write_btn = new QPushButton("Далее", this);
     submit_write_btn->setGeometry(200, 150, 150, 30);
     submit_write_btn->hide();
+    submit_change_size_btn = new QPushButton("Применить", this);
+    submit_change_size_btn->setGeometry(200, 150, 150, 30);
+    submit_change_size_btn->hide();
 
     print_mode = new QComboBox(this);
     print_mode->addItem("Классический");
@@ -89,10 +101,12 @@ TInterface::TInterface(QWidget *parent)
     connect(change_an_btn, SIGNAL(pressed()), this, SLOT(change_an()));
     connect(print_btn, SIGNAL(pressed()), this, SLOT(print()));
     connect(write_btn, SIGNAL(pressed()), this, SLOT(write()));
+    connect(change_size_btn, SIGNAL(pressed()), this, SLOT(change_size()));
     connect(submit_an_btn, SIGNAL(pressed()), this, SLOT(imp_change_an()));
     connect(submit_value_btn, SIGNAL(pressed()), this, SLOT(imp_value()));
     connect(submit_print_btn, SIGNAL(pressed()), this, SLOT(imp_print()));
     connect(submit_write_btn, SIGNAL(pressed()), this, SLOT(write()));
+    connect(submit_change_size_btn, SIGNAL(pressed()), this, SLOT(imp_change_size()));
 }
 
 TInterface::~TInterface()
@@ -101,11 +115,13 @@ TInterface::~TInterface()
     delete change_an_btn;
     delete print_btn;
     delete write_btn;
+    delete change_size_btn;
 
     delete submit_an_btn;
     delete submit_value_btn;
     delete submit_print_btn;
     delete submit_write_btn;
+    delete submit_change_size_btn;
 
     delete print_mode;
 
@@ -127,6 +143,9 @@ TInterface::~TInterface()
     delete an_delimiter;
     delete an_re;
     delete an_im;
+
+    delete new_size_name;
+    delete new_size_value;
 }
 
 void TInterface::value()
@@ -246,4 +265,21 @@ void TInterface::write()
         output->setText("Полином изменен");
         return;
     }
+}
+
+void TInterface::change_size()
+{
+    output->setText("");
+    new_size_name->show();
+    new_size_value->show();
+    submit_change_size_btn->show();
+}
+
+void TInterface::imp_change_size()
+{
+    main_pol.change_size(new_size_value->text().toInt());
+    output->setText("Размер изменен");
+    new_size_name->hide();
+    new_size_value->hide();
+    submit_change_size_btn->hide();
 }
